@@ -50,6 +50,12 @@ fi
 
 exit 0
 ```
+* Append this to /etc/pam.d/sshd:
+```
+# Post Login Scripts
+session required pam_exec.so /etc/pam_scripts/login-logger.sh
+session required pam_exec.so /etc/pam_scripts/storage.sh
+```
 
 ## LDAP
 
