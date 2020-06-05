@@ -7,6 +7,7 @@
 * nfs-common
 
 ### Setup
+* Setup NTP sync: https://www.tecmint.com/synchronize-time-with-ntp-in-linux/ (maybe setup a local NTP server on the future?)
 * Setup this on every node: https://www.howtoforge.com/set-up-openldap-client-on-debian-10/
 * Setup mounts on /etc/fstab, example:
 ```
