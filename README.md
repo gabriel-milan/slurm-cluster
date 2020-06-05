@@ -6,16 +6,7 @@
 ### Requirements
 * nfs-common
 
-## LDAP
-
-For account management
-
-### Server
-Setup a single machine for this (can be a VM)
-https://computingforgeeks.com/how-to-install-and-configure-openldap-server-on-debian/
-After it is set, you should be able to manage accounts on http://ldap-machine-ip/lam/
-
-### Client
+### Setup
 * Setup this on every node: https://www.howtoforge.com/set-up-openldap-client-on-debian-10/
 * Setup mounts on /etc/fstab, example:
 ```
@@ -59,6 +50,14 @@ fi
 
 exit 0
 ```
+
+## LDAP
+
+For account management.
+
+Setup a single machine for this (can be a VM)
+https://computingforgeeks.com/how-to-install-and-configure-openldap-server-on-debian/
+After it is set, you should be able to manage accounts on http://ldap-machine-ip/lam/
 
 ## FreeNAS
 
