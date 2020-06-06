@@ -64,7 +64,7 @@ For account management.
 
 Setup a single machine for this (can be a VM)
 
-* Kerberos setup: https://www.linuxtoday.com/blog/integrating-ldap-and-kerberos-part-one-kerberos.html
+* Kerberos setup: http://techpubs.spinlocksolutions.com/dklar/kerberos.html
 * LDAP setup: https://wiki.debian.org/LDAP/OpenLDAPSetup
 * Integration: https://wiki.debian.org/LDAP/Kerberos
 
