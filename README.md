@@ -65,7 +65,7 @@ For account management.
 Setup a single machine for this (can be a VM)
 
 * Kerberos setup: http://techpubs.spinlocksolutions.com/dklar/kerberos.html
-* LDAP setup: https://wiki.debian.org/LDAP/OpenLDAPSetup
+* LDAP setup: https://computingforgeeks.com/how-to-install-and-configure-openldap-server-on-debian/
 * Integration: https://wiki.debian.org/LDAP/Kerberos
 
 ## FreeNAS
