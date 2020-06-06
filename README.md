@@ -7,6 +7,7 @@
 * nfs-common
 
 ### Setup
+* Setup private nameserver on `/etc/resolv.conf`
 * Setup NTP sync: https://www.tecmint.com/synchronize-time-with-ntp-in-linux/ (maybe setup a local NTP server on the future?)
 * Setup this on every node: https://www.howtoforge.com/set-up-openldap-client-on-debian-10/
 * Setup mounts on /etc/fstab, example:
@@ -67,6 +68,12 @@ Setup a single machine for this (can be a VM)
 * Kerberos setup: http://techpubs.spinlocksolutions.com/dklar/kerberos.html
 * LDAP setup: https://computingforgeeks.com/how-to-install-and-configure-openldap-server-on-debian/
 * Integration: https://wiki.debian.org/LDAP/Kerberos
+
+## NameServer
+
+For resolving names.
+
+* Tutorial: https://www.digitalocean.com/community/tutorials/how-to-configure-bind-as-a-private-network-dns-server-on-ubuntu-18-04-pt
 
 ## FreeNAS
 
