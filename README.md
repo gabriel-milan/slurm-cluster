@@ -58,13 +58,15 @@ session required pam_exec.so /etc/pam_scripts/login-logger.sh
 session required pam_exec.so /etc/pam_scripts/storage.sh
 ```
 
-## LDAP
+## LDAP + Kerberos
 
 For account management.
 
 Setup a single machine for this (can be a VM)
-https://computingforgeeks.com/how-to-install-and-configure-openldap-server-on-debian/
-After it is set, you should be able to manage accounts on http://ldap-machine-ip/lam/
+
+* Kerberos setup: https://www.linuxtoday.com/blog/integrating-ldap-and-kerberos-part-one-kerberos.html
+* LDAP setup: https://wiki.debian.org/LDAP/OpenLDAPSetup
+* Integration: https://wiki.debian.org/LDAP/Kerberos
 
 ## FreeNAS
 
