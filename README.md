@@ -7,7 +7,7 @@
 * nfs-common
 
 ### Setup
-* Setup private nameserver on `/etc/resolv.conf`
+* Add nameserver (if needed): https://itsfoss.com/resolvconf-permanent-ubuntu/
 * Setup NTP sync: https://www.tecmint.com/synchronize-time-with-ntp-in-linux/ (maybe setup a local NTP server on the future?)
 * Setup this on every node: https://www.howtoforge.com/set-up-openldap-client-on-debian-10/
 * Setup mounts on /etc/fstab, example:
