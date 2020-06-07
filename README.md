@@ -1,7 +1,7 @@
 
 # Configuring a SLURM cluster
 
-https://github.com/nateGeorge/slurm_gpu_ubuntu/issues/2
+https://packages.debian.org/buster/libmariadb-dev-compat for mysql_config
 
 ## Node configuration
 
