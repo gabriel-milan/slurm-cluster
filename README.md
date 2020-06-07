@@ -2,6 +2,7 @@
 # Configuring a SLURM cluster
 
 https://packages.debian.org/buster/libmariadb-dev-compat for mysql_config
+https://bugs.schedmd.com/show_bug.cgi?id=2872 for fixing MySQL dep on SLURM ./configure
 
 ## Node configuration
 
