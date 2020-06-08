@@ -847,9 +847,108 @@ Finally, if everything went well, you can check system health by typing `sinfo`.
 
 **This step should be done ONLY on the node(slurmd) machines**
 
-To do.
+First we're gonna install MUNGE, for authentication
 
-### Links for later
+```
+su -
+apt update
+apt install libmunge-dev libmunge2 munge
+```
 
-https://slurm.schedmd.com/SLUG19/DTU_Slurm_Account_Sync.pdf Future
+We need to have the same copy of `munge.key` (located at `/etc/munge/munge.key`) for every node. In order to do that, copy it from `host.cluster` to every other machine. One way to do that is over SCP
+
+```
+scp host.cluster:/etc/munge/munge.key /etc/munge/.
+```
+
+Then fix permissions
+
+```
+chown munge:munge /etc/munge/munge.key
+chmod 400 /etc/munge/munge.key
+```
+
+And restart MUNGE
+
+```
+systemctl enable munge
+systemctl restart munge
+```
+
+After setting MUNGE, we're going to install the same copy of SLURM we've built on the host machine by doing
+
+```
+dpkg -i /storage/slurm-20.02.3_1.0_amd64.deb
+```
+
+Next, we need to create the `/etc/slurm` directory and have the same copy of `/etc/slurm/slurm.conf` on every machine. Similarly to the MUNGE key, do
+
+```
+scp host.cluster:/etc/slurm/slurm.conf /etc/slurm/.
+```
+
+Then you need to create the `/etc/slurm/gres.conf` file, which takes care of listing resources other than CPUs (like GPUs, for example). **In my case, this will be just an empty file** but, if you need an example, a configuration for the DGX-1 server is below
+
+```
+NodeName=linux1 Name=gpu File=/dev/nvidia0 CPUs=0-19,40-59
+NodeName=linux1 Name=gpu File=/dev/nvidia1 CPUs=0-19,40-59
+NodeName=linux1 Name=gpu File=/dev/nvidia2 CPUs=0-19,40-59
+NodeName=linux1 Name=gpu File=/dev/nvidia3 CPUs=0-19,40-59
+NodeName=linux1 Name=gpu File=/dev/nvidia4 CPUs=20-39,60-79
+NodeName=linux1 Name=gpu File=/dev/nvidia5 CPUs=20-39,60-79
+NodeName=linux1 Name=gpu File=/dev/nvidia6 CPUs=20-39,60-79
+NodeName=linux1 Name=gpu File=/dev/nvidia7 CPUs=20-39,60-79
+```
+
+After that, as we'll use `cgroup`, you need to create both of these files:
+
+* `/etc/slurm/cgroup.conf`
+
+```
+CgroupAutomount=yes 
+CgroupReleaseAgentDir="/etc/slurm/cgroup" 
+
+ConstrainCores=yes 
+ConstrainDevices=yes
+ConstrainRAMSpace=yes
+#TaskAffinity=yes
+```
+
+* `/etc/slurm/cgroup_allowed_devices_file.conf`
+
+```
+/dev/null
+/dev/urandom
+/dev/zero
+/dev/sda*
+/dev/cpu/*/*
+/dev/pts/*
+/dev/nvidia*
+```
+
+This will be useful later for forbiding users from SSH into machines they have no jobs allocated
+
+Then, create missing SLURM user and make some directories
+
+```
+useradd slurm
+mkdir -p /var/spool/slurm/d
+```
+
+Assuming you've cloned this repository, copy the `slurmd.service` file and then enable it
+
+```
+cp /storage/slurm-cluster/slurmd.service /etc/systemd/system/
+systemctl enable slurmd
+systemctl start slurmd
+```
+
+At this point, if you've done everything right, you should be able to do `sinfo` and see your node state `idle`.
+
+### Future work
+
+* SLURM account synchronization with UNIX groups and users: https://slurm.schedmd.com/SLUG19/DTU_Slurm_Account_Sync.pdf
+* Setup cgroup: https://github.com/mknoxnv/ubuntu-slurm
+* Setup passwordless SSH with Kerberos, following the end of this tutorial: http://techpubs.spinlocksolutions.com/dklar/kerberos.html
+* Setup multiple job queues
 
