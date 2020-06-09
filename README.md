@@ -976,9 +976,10 @@ update-grub
 reboot now
 ```
 
-To finish the configuration of the nodes, we'll forbid users from ssh-ing into a compute node on which they do not have a job allocation. In order to do that, do
+To finish the configuration of the nodes, we'll forbid users from ssh-ing into a compute node on which they do not have a job allocation AND we'll add sjstat, which is a very nice command. In order to do that, do
 
 ```
+cp /storage/slurm-20.02.3/contribs/sjstat /usr/bin/.
 cp /storage/slurm-20.02.3/contribs/pam/.libs/pam_slurm.so /lib/x86_64-linux-gnu/security/
 ```
 
