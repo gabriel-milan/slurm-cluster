@@ -947,8 +947,11 @@ At this point, if you've done everything right, you should be able to do `sinfo`
 
 ### Future work
 
+* Multi-factor priority: https://slurm.schedmd.com/priority_multifactor.html
 * SLURM account synchronization with UNIX groups and users: https://slurm.schedmd.com/SLUG19/DTU_Slurm_Account_Sync.pdf
 * Setup cgroup: https://github.com/mknoxnv/ubuntu-slurm
 * Setup passwordless SSH with Kerberos, following the end of this tutorial: http://techpubs.spinlocksolutions.com/dklar/kerberos.html
-* Setup multiple job queues
+* Setup multiple job queues: add new partitions to `slurm.conf`
+* Some sort of mechanism to keep `slurm.conf` always synced. Maybe a shared mount?
+* Web dashboard (couldn't put slurm-web to work)
 
