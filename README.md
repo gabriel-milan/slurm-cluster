@@ -1,5 +1,3 @@
-
-
 # Configuring a SLURM cluster
 
 Here you'll find a guide I've wrote to myself while experimenting on building a SLURM cluster using VMs on my computer.
@@ -294,7 +292,7 @@ chmod -R 750  /var/log/kerberos
 Edit the `/etc/krb5kdc/kadm5.acl` file and make sure the following line is there and NOT commented
 
 ```
-*/admin *
+*/admin *e
 ```
 
 Apply changes
@@ -409,6 +407,28 @@ Next, we'll setup PAM for creating home directories for users that don't have it
 
 ```
 session    required    pam_mkhomedir.so skel=/etc/skel/ umask=022
+```
+
+Finally, we'll setup passwordless SSH using Kerberos tickets. For that, inside the `kadmin` shell, run (replacing `<hostname.hostdomain>`):
+
+```
+addprinc -policy service -randkey host/<hostname.hostdomain>
+ktadd -k /etc/krb5.keytab host/<hostname.hostdomain>
+```
+
+Then edit the `/etc/ssh/sshd_config` file to match the following:
+
+```
+GSSAPIAuthentication yes
+GSSAPICleanupCredentials yes
+GSSAPIKeyExchange yes
+UsePAM yes
+```
+
+Restart SSH service
+
+```
+invoke-rc.d ssh restart
 ```
 
 And you're done! Remember that, for this to work, **you have to create users both on LAM and on Kerberos server**. The password set on LAM can be anything, since the authentication is made through Kerberos. The LDAP server here is mostly used to store home path information and UID/GID management.
@@ -943,14 +963,38 @@ systemctl enable slurmd
 systemctl start slurmd
 ```
 
-At this point, if you've done everything right, you should be able to do `sinfo` and see your node state `idle`.
+At this point, if you've done everything right, you should be able to do `sinfo` and see your node state `idle`. But now, we'll configure `cgroup` in order to be able to manage memory quotas. For that, open `/etc/default/grub` for edition and match the following line
+
+```
+GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"
+```
+
+After that, update GRUB and reboot the machine
+
+```
+update-grub
+reboot now
+```
+
+To finish the configuration of the nodes, we'll forbid users from ssh-ing into a compute node on which they do not have a job allocation. In order to do that, do
+
+```
+cp /storage/slurm-20.02.3/contribs/pam/.libs/pam_slurm.so /lib/x86_64-linux-gnu/security/
+```
+
+and then edit the file `/etc/pam.d/sshd` by adding the following lines just **before** the first `required` statement:
+
+```
+account    sufficient   pam_localuser.so
+account    required     /lib/x86_64-linux-gnu/security/pam_slurm.so
+```
+
+This way, we forbid SLURM users from doing any bypass on deploying workload into nodes and still allow non-SLURM users to SSH normally. And we're done with the nodes!
 
 ### Future work
 
 * Multi-factor priority: https://slurm.schedmd.com/priority_multifactor.html
 * SLURM account synchronization with UNIX groups and users: https://slurm.schedmd.com/SLUG19/DTU_Slurm_Account_Sync.pdf
-* Setup cgroup: https://github.com/mknoxnv/ubuntu-slurm
-* Setup passwordless SSH with Kerberos, following the end of this tutorial: http://techpubs.spinlocksolutions.com/dklar/kerberos.html
 * Setup multiple job queues: add new partitions to `slurm.conf`
 * Some sort of mechanism to keep `slurm.conf` always synced. Maybe a shared mount?
 * Web dashboard (couldn't put slurm-web to work)
