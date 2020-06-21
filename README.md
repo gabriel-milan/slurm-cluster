@@ -999,4 +999,6 @@ This way, we forbid SLURM users from doing any bypass on deploying workload into
 * Setup multiple job queues: add new partitions to `slurm.conf`
 * Some sort of mechanism to keep `slurm.conf` always synced. Maybe a shared mount?
 * Web dashboard (couldn't put slurm-web to work)
+* Install `modules`: https://modules.readthedocs.io/en/latest/INSTALL.html
+* Install `clustershell`: https://clustershell.readthedocs.io/en/latest/install.html
 
