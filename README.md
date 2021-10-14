@@ -968,6 +968,12 @@ At this point, if you've done everything right, you should be able to do `sinfo`
 ```
 GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"
 ```
+	
+If your system uses cgroup v2 (as Debian bullseye):
+	
+```
+GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1 systemd.unified_cgroup_hierarchy=false systemd.legacy_systemd_cgroup_controller=false"
+```
 
 After that, update GRUB and reboot the machine
 
